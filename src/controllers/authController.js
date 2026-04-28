@@ -10,13 +10,13 @@ export const register = async (req, res) => {
 
     const existed = await User.findOne({ email });
     if (existed)
-      return res.status(400).json({ message: "Bu email artıq mövcuddur" });
+      return res.status(400).json({ message: "This email already exists" });
 
     const existedUsername = await User.findOne({ username });
     if (existedUsername)
       return res
         .status(400)
-        .json({ message: "Bu istifadəçi adı artıq mövcuddur" });
+        .json({ message: "This username already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -30,11 +30,11 @@ export const register = async (req, res) => {
 
 
     res.status(201).json({
-      message: "Qeydiyyat tamamlandı! Zəhmət olmasa emailinizi təsdiqləyin.",
+      message: "Registration complete! Please verify your email.",
     });
   } catch (error) {
     console.error("❌ Register error:", error);
-    res.status(500).json({ message: "Server xətası baş verdi" });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -45,15 +45,14 @@ export const login = async (req, res) => {
     if (!user) {
       return res
         .status(400)
-        .json({ message: "Hesab tapılmadı. Zəhmət olmasa emaili yoxlayın" });
+        .json({ message: "Invalid email or password." });
     }
-
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res
         .status(400)
-        .json({ message: "Şifrə səhvdir. Yenidən cəhd edin" });
+        .json({ message: "Invalid email or password." });
     }
     const token = jwt.sign(
       { id: user._id, role: user.role },
@@ -62,7 +61,7 @@ export const login = async (req, res) => {
     );
 
     res.json({
-      message: "Uğurlu giriş!",
+      message: "Login successful!",
       token,
       user: {
         id: user._id,
@@ -83,10 +82,10 @@ export const me = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
     if (!user) {
-      return res.status(404).json({ message: "İstifadəçi tapılmadı" });
+      return res.status(404).json({ message: "User not found" });
     }
     res.status(200).json({ user });
   } catch (error) {
-    res.status(500).json({ message: "Server xətası baş verdi" });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
