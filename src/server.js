@@ -28,7 +28,7 @@ app.get("/", (req, res) => {
 
   res.send(`
 <!DOCTYPE html>
-<html lang="az">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -355,17 +355,17 @@ app.get("/", (req, res) => {
       <div class="card-header">
         <div class="badge">
           <span class="pulse-dot"></span>
-          Aktiv
+          Active
         </div>
-        <div class="title">Backend <span>işləyir</span></div>
-        <div class="subtitle">Bütün sistemlər normal vəziyyətdədir</div>
+        <div class="title">Backend <span>is Running</span></div>
+        <div class="subtitle">All systems are operating normally</div>
       </div>
 
       <div class="stats">
         <div class="stat">
           <div class="stat-icon">⚡</div>
           <div class="stat-value">Online</div>
-          <div class="stat-label">Server vəziyyəti</div>
+          <div class="stat-label">Server Status</div>
         </div>
         <div class="stat">
           <div class="stat-icon">⏱</div>
@@ -380,7 +380,7 @@ app.get("/", (req, res) => {
         <div class="stat">
           <div class="stat-icon">🛡</div>
           <div class="stat-value">JWT + DB</div>
-          <div class="stat-label">Auth stack</div>
+          <div class="stat-label">Auth Stack</div>
         </div>
       </div>
 
@@ -390,24 +390,24 @@ app.get("/", (req, res) => {
           <div class="endpoint">
             <span class="method get">GET</span>
             <span class="endpoint-path">/</span>
-            <span class="endpoint-desc">Status səhifəsi</span>
+            <span class="endpoint-desc">Status page</span>
           </div>
           <div class="endpoint">
             <span class="method post">POST</span>
             <span class="endpoint-path">/api/auth/register</span>
-            <span class="endpoint-desc">Qeydiyyat</span>
+            <span class="endpoint-desc">Register</span>
           </div>
           <div class="endpoint">
             <span class="method post">POST</span>
             <span class="endpoint-path">/api/auth/login</span>
-            <span class="endpoint-desc">Giriş</span>
+            <span class="endpoint-desc">Login</span>
           </div>
         </div>
       </div>
 
       <div class="card-footer">
         <span class="env-chip">NODE ${process.version}</span>
-        <span class="timestamp">${new Date().toLocaleString("az-AZ", { timeZone: "Asia/Baku" })}</span>
+        <span class="timestamp">${new Date().toLocaleString("en-US", { timeZone: "Asia/Baku" })}</span>
       </div>
     </div>
   </div>
