@@ -1,12 +1,14 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import crypto from "crypto";
-
 
 export const register = async (req, res) => {
   try {
     const { name, surname, username, email, password } = req.body;
+
+    if (!name || !surname || !username || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
 
     const existed = await User.findOne({ email });
     if (existed)
@@ -14,9 +16,7 @@ export const register = async (req, res) => {
 
     const existedUsername = await User.findOne({ username });
     if (existedUsername)
-      return res
-        .status(400)
-        .json({ message: "This username already exists" });
+      return res.status(400).json({ message: "This username already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -28,9 +28,13 @@ export const register = async (req, res) => {
       password: hashedPassword,
     });
 
-
     res.status(201).json({
-      message: "Registration complete! Please verify your email.",
+      message: "Account created successfully",
+      user: {
+        id: newUser._id,
+        username: newUser.username,
+        email: newUser.email,
+      },
     });
   } catch (error) {
     console.error("❌ Register error:", error);
@@ -43,16 +47,12 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      return res
-        .status(400)
-        .json({ message: "Invalid email or password." });
+      return res.status(400).json({ message: "Invalid email or password." });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res
-        .status(400)
-        .json({ message: "Invalid email or password." });
+      return res.status(400).json({ message: "Invalid email or password." });
     }
     const token = jwt.sign(
       { id: user._id, role: user.role },
@@ -76,7 +76,6 @@ export const login = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 export const me = async (req, res) => {
   try {
